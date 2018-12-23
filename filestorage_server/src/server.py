@@ -22,7 +22,7 @@ import instance.api as api
 
 
 #help info 
-@app.route('/machinelearning/v1.0.0/help') 
+@app.route('/filestorage/v1.0.0/help') 
 def help(): 
    return 'help info' 
 
