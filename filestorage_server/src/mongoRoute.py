@@ -17,8 +17,12 @@ import os
 import uuid
 
 #flask
-from flask import Flask, Response, jsonify, make_response, request
+from flask import Flask, Response, jsonify, make_response, request,send_file
 from flask_restful import Resource, reqparse
+import mimetypes
+parser = reqparse.RequestParser()
+parser.add_argument('fileid',   type=str, location='args')
+parser.add_argument('filename', type=str, location='args')
 
 #server
 import log as log
@@ -26,9 +30,11 @@ import mongoGFS as mongoGFS
 import instance as instance
 
 configure   = instance.conf
+
 #upload large file 
 #first upload the data in piece and merge the file into one file
 #then upload the data into the mongoDB GridFS
+#upload the chunk file
 class LargeFileUploadChunkMongo(Resource):
     def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs)
@@ -51,6 +57,7 @@ class LargeFileUploadChunkMongo(Resource):
     def get(self):
         return self.post()
 
+#merge all the chunk and restore the file into mongoDB GridfFS
 class LargeFileUploadFinishedMongo(Resource):
     def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs)
@@ -109,22 +116,100 @@ class SmallFileUploadMongo(Resource):
     def get(self):
         return self.post()
 
+#download large file
 class LargeFileDownloadMongo(Resource):
     def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs)
 
     def post(self):
-        return "success"
+        args = parser.parse_args()
+        fileid   = args.get('fileid')
+        filename = args.get('filename')
+        
+        mongoAttach=mongoGFS.DBFileAttach()
+        """         
+        fileobj = mongoAttach.downloadFileAttachSend(fileid)
+        response = make_response(send_file(fileobj,mimetype='application/octet-stream',as_attachment=True,attachment_filename=filename))
+        response.headers["Content-Length"] = response.calculate_content_length()
+        return response 
+        """
+
+        """ 
+        trans binnary data
+        """  
+        dataGenerator=mongoAttach.downloadFileAttach(fileid)
+        mime_type = mimetypes.guess_type(filename)[0]
+        if(mime_type==None):
+            mime_type = 'application/octet-stream'
+        response = Response(dataGenerator,mimetype=mime_type)
+        response.headers["Content-disposition"] = 'attachment; filename=%s' % filename   # 如果不加上这行代码，导致下图的问题
+        response.headers["Content-Length"]=mongoAttach.getFileAttachSize(fileid)
+        return response
     
     def get(self):
         return self.post()
 
+#small file down direct download all data
 class SmallFileDownloadMongo(Resource):
     def __init__(self, *args, **kwargs):
         return super().__init__(*args, **kwargs)
 
     def post(self):
-        return "success"
+        try:
+            args = parser.parse_args()
+            fileid   = args.get('fileid')
+            filename = args.get('filename')
+            
+            mongoObject=mongoGFS.DBFileObject()
+            """         
+            fileobj = mongoAttach.downloadFileAttachSend(fileid)
+            response = make_response(send_file(fileobj,mimetype='application/octet-stream',as_attachment=True,attachment_filename=filename))
+            response.headers["Content-Length"] = response.calculate_content_length()
+            return response 
+            """
+
+            """ 
+            trans binnary data
+            """  
+            fileInfo =mongoObject.downloadFileObject(fileid)
+            mime_type = mimetypes.guess_type(filename)[0]
+            if(mime_type==None):
+                mime_type = 'application/octet-stream'
+            log.logger.info("download file success")
+            return Response(fileInfo['fileobject'],mimetype=mime_type)
+        except Exception as e:
+            log.logger.error(str(e))
+            
+
+    def get(self):
+        return self.post()
+
+#small file down direct download all data
+class SmallFileDownloadAsFileMongo(Resource):
+    def __init__(self, *args, **kwargs):
+        return super().__init__(*args, **kwargs)
+
+    def post(self):
+        args = parser.parse_args()
+        fileid   = args.get('fileid')
+        filename = args.get('filename')
+        
+        mongoObject=mongoGFS.DBFileObject()
+        """         
+        fileobj = mongoAttach.downloadFileAttachSend(fileid)
+        response = make_response(send_file(fileobj,mimetype='application/octet-stream',as_attachment=True,attachment_filename=filename))
+        response.headers["Content-Length"] = response.calculate_content_length()
+        return response 
+        """
+
+        """ 
+        trans binnary data
+        """  
+        fileInfo =mongoObject.downloadFileObject(fileid)
+        mime_type = 'application/octet-stream'
+        response = Response(fileInfo['fileobject'],mimetype=mime_type)
+        response.headers["Content-disposition"]=": attachment;"+filename;
+        return response
     
     def get(self):
         return self.post()
