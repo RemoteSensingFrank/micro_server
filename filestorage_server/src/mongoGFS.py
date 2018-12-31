@@ -16,6 +16,12 @@ Desc: Using MongoDB GFS to store and restore big file\
       3.Put the data into the GFS;\
       4.Delete the data in the filesystem\
       So what we considerd is how to put the file into the GFS in filesystem
+
+Date:2018-12-29
+version:1.1.0
+email:wuwei_cug@163.com
+Add the large and small file storage and download
+
 """
 #encoding=utf-8
 #sys
