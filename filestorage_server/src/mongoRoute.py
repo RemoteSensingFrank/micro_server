@@ -3,7 +3,7 @@
 
 """
 protocol: 
-desc:Using to upload and down load the file
+desc:Using to upload and down load the file using mongoDB
 compiler:python3.6.x
 created by  : Frank.Wu
 company     : GEDI
@@ -64,11 +64,11 @@ class LargeFileUploadFinishedMongo(Resource):
 
     def post(self):
         chunk           = 0  # 分片序号
-        dstdir          = request.data["dstdir"]
+        uploaddir       = request.data["dstdir"]
         task            = request.data["task_id"]     
         target_filename = request.data["filename"]
         fileInfo        = request.data["fileInfo"]
-
+        dstdir = '%s/%s' %("../data", uploaddir)
         #it will take some time to merge the file
         with open('%s/%s' %(dstdir, target_filename), 'wb') as target_file:  # 创建新文件
             while True:
@@ -109,9 +109,9 @@ class SmallFileUploadMongo(Resource):
         filepath = '%s/%s' %(dstdir, file.filename)
         fileInfo["file_attach_path"]  = filepath
         fileObjOpt=mongoGFS.DBFileObject()
-        fileObjOpt.insertFileAttach(file,fileInfo)
+        fileObjOpt.insertFileObject(file,fileInfo)
         
-        return "success"
+        return make_response(jsonify({'success upload success'}),200)
     
     def get(self):
         return self.post()
@@ -125,7 +125,6 @@ class LargeFileDownloadMongo(Resource):
         args = parser.parse_args()
         fileid   = args.get('fileid')
         filename = args.get('filename')
-        
         mongoAttach=mongoGFS.DBFileAttach()
         """         
         fileobj = mongoAttach.downloadFileAttachSend(fileid)

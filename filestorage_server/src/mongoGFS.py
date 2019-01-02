@@ -55,7 +55,7 @@ def download_file_chunkMongo(fileObj,length):
         progress=float(fileObj.tell()/length)
         yield chunk
 
-
+#mongo GridFS operation class
 class GFS:
     #initial GFS operation class
     #connect to mongoDB
@@ -176,7 +176,6 @@ def DeleteFileThread(filename):
         logLock.release()
     except:
         log.logger.error('store file error')
-
 
 #used to create thumbnail for image files
 #image size of the thumbnail is smaller than(300,200)
