@@ -2,3 +2,4 @@ filestorage_server/data/*
 filestorage_server/**/*.pyc
 machinelearning_server/data/*
 machinelearning_server/model/**
+machinelearning_server/**/**/*.pyc

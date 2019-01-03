@@ -4,15 +4,16 @@ import numpy as np
 import tensorflow as tf
 import os
 import io
-import string_int_label_map_pb2
+import src.log as log
+import src.string_int_label_map_pb2 as string_int_label_map_pb2
 from PIL import Image,ImageDraw
 from google.protobuf import text_format
 
 #imported data ：
 #1.model graph
 #2.label mapping 
-PATH_TO_FROZEN_GRAPH="D:\\python\\micro_server\\machinelearning_server\\model\\fastrcnn\\frozen_inference_graph.pb" #model graph
-PATH_TO_LABEL_MAP="D:\\python\\micro_server\\machinelearning_server\\model\\fastrcnn\\labelmap.pbtxt" #labelmap file
+PATH_TO_FROZEN_GRAPH="../model/fastrcnn/frozen_inference_graph.pb" #model graph
+PATH_TO_LABEL_MAP="../model/fastrcnn//labelmap.pbtxt" #labelmap file
 
 #import label mapping
 def _validate_label_map(label_map):
@@ -250,27 +251,38 @@ if the param do not provided it will use the default params
 """
 class FastRCNNDetector:
     def __init__(self, *args, **kwargs):
-        pathMap  = PATH_TO_LABEL_MAP
-        pathGraph= PATH_TO_FROZEN_GRAPH
-        if(len(args)==1):
-          pathGraph=args[0]
-        if(len(args)==2):
-          pathGraph=args[0]
-          pathMap  =args[1]
+        try:
+            pathMap  = PATH_TO_LABEL_MAP
+            pathGraph= PATH_TO_FROZEN_GRAPH
+            if(len(args)==1):
+                pathGraph=args[0]
+            if(len(args)==2):
+                pathGraph=args[0]
+                pathMap  =args[1]
 
-        self.detection_graph = tf.Graph()
-        self.labelMap = create_category_index_from_labelmap(PATH_TO_LABEL_MAP,use_display_name=True)
-        with self.detection_graph.as_default():
-            od_graph_def = tf.GraphDef()
-            with tf.gfile.GFile(PATH_TO_FROZEN_GRAPH, 'rb') as fid:
-                serialized_graph = fid.read()
-                od_graph_def.ParseFromString(serialized_graph)
-                tf.import_graph_def(od_graph_def, name='')
+            self.detection_graph = tf.Graph()
+            self.labelMap = create_category_index_from_labelmap(PATH_TO_LABEL_MAP,use_display_name=True)
+            with self.detection_graph.as_default():
+                od_graph_def = tf.GraphDef()
+                with tf.gfile.GFile(PATH_TO_FROZEN_GRAPH, 'rb') as fid:
+                    serialized_graph = fid.read()
+                    od_graph_def.ParseFromString(serialized_graph)
+                    tf.import_graph_def(od_graph_def, name='')
+            log.logger.info("initial detector success")
+        except:
+            log.logger.error("initial detector failed")
+            self.detection_graph=None
+            self.labelMap =None
+            return None
 
     #recongnize
     #param image:image object
     #param graph:model graph
     def run_inference_for_single_image(self,image):
+        if(self.detection_graph==None or self.labelMap==None):
+            log.logger.error("detector do not initial")
+            return None
+
         with self.detection_graph.as_default():
             with tf.Session() as sess:
                 # Get handles to input and output tensors
@@ -291,23 +303,18 @@ class FastRCNNDetector:
                     real_num_detection = tf.cast(tensor_dict['num_detections'][0], tf.int32)
                     detection_boxes = tf.slice(detection_boxes, [0, 0], [real_num_detection, -1])
                     detection_masks = tf.slice(detection_masks, [0, 0, 0], [real_num_detection, -1, -1])
-                    detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
-                        detection_masks, detection_boxes, image.shape[0], image.shape[1])
-                    detection_masks_reframed = tf.cast(
-                        tf.greater(detection_masks_reframed, 0.5), tf.uint8)
+                    detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(detection_masks, detection_boxes, image.shape[0], image.shape[1])
+                    detection_masks_reframed = tf.cast(tf.greater(detection_masks_reframed, 0.5), tf.uint8)
                     # Follow the convention by adding back the batch dimension
-                    tensor_dict['detection_masks'] = tf.expand_dims(
-                        detection_masks_reframed, 0)
+                    tensor_dict['detection_masks'] = tf.expand_dims(detection_masks_reframed, 0)
 
                 image_tensor = tf.get_default_graph().get_tensor_by_name('image_tensor:0')
                 # Run inference
-                output_dict = sess.run(tensor_dict,
-                                    feed_dict={image_tensor: np.expand_dims(image, 0)})
+                output_dict = sess.run(tensor_dict,feed_dict={image_tensor: np.expand_dims(image, 0)})
 
                 # all outputs are float32 numpy arrays, so convert types as appropriate
                 output_dict['num_detections'] = int(output_dict['num_detections'][0])
-                output_dict['detection_classes'] = output_dict[
-                    'detection_classes'][0].astype(np.uint8)
+                output_dict['detection_classes'] = output_dict['detection_classes'][0].astype(np.uint8)
                 output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
                 output_dict['detection_scores'] = output_dict['detection_scores'][0]
                 if 'detection_masks' in output_dict:
@@ -318,10 +325,13 @@ class FastRCNNDetector:
     #param pathImg:image path
     #param graph:model graphic
     def target_detect(self,pathImg):
+        if(self.detection_graph==None or self.labelMap==None):
+            log.logger.error("detector do not initial")
+            return None
         image = Image.open(pathImg)
         image_np = load_image_into_numpy_array(image)
         image_np_expanded = np.expand_dims(image_np, axis=0)
-        output_dict = self.run_inference_for_single_image(image_np, self.detection_graph)
+        output_dict = self.run_inference_for_single_image(image_np)
         return output_dict
 
     #imput binnary data of the image and detected
@@ -329,11 +339,14 @@ class FastRCNNDetector:
     #param graph :model graph
     #param labelMap:laebl of the map
     def target_detect_binnary(self,imgBuf):
+        if(self.detection_graph==None or self.labelMap==None):
+            log.logger.error("detector do not initial")
+            return None
         f=io.BytesIO(imgBuf)
         image=Image.open(f)
         image_np = load_image_into_numpy_array(image)
         image_np_expanded = np.expand_dims(image_np, axis=0)
-        output_dict = self.run_inference_for_single_image(image_np, self.detection_graph)
+        output_dict = self.run_inference_for_single_image(image_np)
         return output_dict
 
     #detector as output as visiual
@@ -341,6 +354,9 @@ class FastRCNNDetector:
     #param thresthold:reliable thresthold
     def target_detect_visiual_output(self,pathImg,thresthold):
         output=self.target_detect(pathImg)
+        if(output==None):
+            return None
+
         boxes = output['detection_boxes']
         scores = output['detection_scores']
         classes = output['detection_classes']
@@ -353,9 +369,9 @@ class FastRCNNDetector:
                   outputItem['box']=(boxes[idx][0]*im_width,boxes[idx][2]*im_height,boxes[idx][1]*im_width,boxes[idx][3]*im_height)
                   outputItem['score']=score
                   outputItem['classify']=""
-                  for idxclass,itemid in enumerate(labelMap):
-                      if(labelMap[itemid]["id"]==classes[idx]):
-                          outputItem['classify']=labelMap[itemid]["name"]
+                  for idxclass,itemid in enumerate(self.labelMap):
+                      if(self.labelMap[itemid]["id"]==classes[idx]):
+                          outputItem['classify']=self.labelMap[itemid]["name"]
                           break
                   visiual_output.append(outputItem)
                   pass
@@ -366,7 +382,9 @@ class FastRCNNDetector:
     #param labelMap:classify label
     #param thresthold:reliable thresthold
     def target_detect_visiual_binnary(self,imgBuf,thresthold):
-        output=self.target_detect(imgBuf)
+        output=self.target_detect_binnary(imgBuf)
+        if(output==None):
+            return None
         boxes = output['detection_boxes']
         scores = output['detection_scores']
         classes = output['detection_classes']
@@ -380,9 +398,9 @@ class FastRCNNDetector:
                   outputItem['box']=(boxes[idx][0]*im_width,boxes[idx][2]*im_height,boxes[idx][1]*im_width,boxes[idx][3]*im_height)
                   outputItem['score']=score
                   outputItem['classify']=""
-                  for idxclass,itemid in enumerate(labelMap):
-                      if(labelMap[itemid]["id"]==classes[idx]):
-                          outputItem['classify']=labelMap[itemid]["name"]
+                  for idxclass,itemid in enumerate(self.labelMap):
+                      if(self.labelMap[itemid]["id"]==classes[idx]):
+                          outputItem['classify']=self.labelMap[itemid]["name"]
                           break
                   visiual_output.append(outputItem)
                   pass
