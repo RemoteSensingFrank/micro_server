@@ -42,6 +42,7 @@ class MongoGFSTest(unittest.TestCase):  # 继承unittest.TestCase
         rs=dectector.target_detect_visiual_output("D:\\python\\micro_server\\machinelearning_server\\data\\DJI_0005.JPG",0.9)
         self.assertNotEqual(None,rs)
 
+
     def testDetectVisBinnary(self):
         dectector = fastrcnn.FastRCNNDetector()
         size = os.path.getsize("D:\\python\\micro_server\\machinelearning_server\\data\\DJI_0005.JPG")
