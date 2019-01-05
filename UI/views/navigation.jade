@@ -1,0 +1,24 @@
+nav#navigation.navbar.navbar-inverse
+  div.container-fluid
+    div.navbar-header: a.navbar-brand(href="#") 机器学习
+    div.collapse.navbar-collapse
+      ul.nav.navbar-nav
+        li.dropdown
+          a.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") 模型选择
+            span.caret
+          ul.dropdown-menu.dropdown-menu-middle
+            li(onClick="FastRcnnModel();"): a(href="#") FastRCNN
+            li(onClick="GANModel();").disabled: a(href="#") GAN
+            li(onClick="LSTM();").disabled: a(href="#") LSTM
+            li(onClick="RNNModel();").disabled: a(href="#") RNN
+        li.navbar-text 所选模型:
+        li.navbar-form
+          div.input-group
+            span.input-group-addon @
+            input#selectedModel.form-control(type="text" placeholder="Model")
+          #openfile.btn.btn-default 打开文件
+          #recgonize.btn.btn-default 识别
+      ul.nav.navbar-nav.navbar-right
+        li.navbar-text 人工判别
+          span#checkResultok.glyphicon.glyphicon-ok
+          span#checkResulterr.glyphicon.glyphicon-remove

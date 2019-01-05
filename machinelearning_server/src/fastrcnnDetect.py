@@ -241,8 +241,7 @@ def loadTfLabelMap(path):
 #param image:image obj
 def load_image_into_numpy_array(image):
     (im_width, im_height) = image.size
-    return np.array(image.getdata()).reshape(
-        (im_height, im_width, 3)).astype(np.uint8)
+    return np.array(image.getdata()).reshape((im_height, im_width, 3)).astype(np.uint8)
 
 """
 FastRCNNDetector:
@@ -396,7 +395,7 @@ class FastRCNNDetector:
             outputItem={}
             if score>thresthold:
                   outputItem['box']=(boxes[idx][0]*im_width,boxes[idx][2]*im_height,boxes[idx][1]*im_width,boxes[idx][3]*im_height)
-                  outputItem['score']=score
+                  outputItem['score']=score[0]
                   outputItem['classify']=""
                   for idxclass,itemid in enumerate(self.labelMap):
                       if(self.labelMap[itemid]["id"]==classes[idx]):
