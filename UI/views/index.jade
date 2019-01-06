@@ -1,0 +1,10 @@
+extends layout
+
+block content       
+  include navigation.jade
+  div#mainWin
+    div#imgwin(align="left")
+      canvas#imgCanvas(width="900px" height="500px")
+    div#recognizewin(align="left")
+      label(style="margin-left:10px; margin-top:5px;") 识别结果：
+      textarea#recongnizeVis(readonly="readonly")
