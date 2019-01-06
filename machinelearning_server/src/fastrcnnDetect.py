@@ -366,7 +366,7 @@ class FastRCNNDetector:
             outputItem={}
             if score>thresthold:
                   outputItem['box']=(boxes[idx][0]*im_width,boxes[idx][2]*im_height,boxes[idx][1]*im_width,boxes[idx][3]*im_height)
-                  outputItem['score']=score
+                  outputItem['score']=str(score)
                   outputItem['classify']=""
                   for idxclass,itemid in enumerate(self.labelMap):
                       if(self.labelMap[itemid]["id"]==classes[idx]):

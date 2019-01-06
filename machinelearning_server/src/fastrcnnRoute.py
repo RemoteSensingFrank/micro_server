@@ -42,10 +42,18 @@ class FastRCNNDetectRoute(Resource):
         detect = dectector.target_detect_visiual_output(path,0.9)
         if(detect==None):
             log.logger.error("detected failed")
-            return make_response(jsonify({"detected failed"}), configure.get("return_info", "detect_failed"))
+            response = make_response(jsonify({"detected failed"}), configure.get("return_info", "detect_failed"))
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
+            response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+            return response
         else:
             log.logger.info("detected success")
-            return make_response(json.dumps(detect), 200)
+            response = make_response(json.dumps(detect), 200)
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
+            response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+            return response
     def get(self):
         return self.post()
 

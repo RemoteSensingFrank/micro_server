@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6950f41-c6c1-47af-8a8b-cbe7a9fa7f5f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../UI/public/stylesheets/UI.css" beforeDir="false" afterPath="$PROJECT_DIR$/../UI/public/stylesheets/UI.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UI/views/index.jade" beforeDir="false" afterPath="$PROJECT_DIR$/../UI/views/index.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UI/views/layout.jade" beforeDir="false" afterPath="$PROJECT_DIR$/../UI/views/layout.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UI/views/navigation.jade" beforeDir="false" afterPath="$PROJECT_DIR$/../UI/views/navigation.jade" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fastrcnnDetect.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fastrcnnDetect.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fastrcnnRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fastrcnnRoute.py" afterDir="false" />
     </list>
@@ -12,11 +16,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-48">
+            <state relative-caret-position="19">
               <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
             </state>
           </provider>
@@ -25,8 +29,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/fastrcnnRoute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="47" selection-start-line="47" selection-end-line="47" />
+            <state relative-caret-position="19">
+              <caret line="46" column="83" selection-start-line="46" selection-start-column="83" selection-end-line="46" selection-end-column="83" />
             </state>
           </provider>
         </entry>
@@ -34,8 +38,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/fastrcnnDetect.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="399" column="66" selection-start-line="399" selection-start-column="66" selection-end-line="399" selection-end-column="66" />
+            <state relative-caret-position="261">
+              <caret line="396" column="71" selection-start-line="396" selection-start-column="71" selection-end-line="396" selection-end-column="72" />
             </state>
           </provider>
         </entry>
@@ -163,59 +167,32 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29910713" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" weight="0.3295082" />
-      <window_info anchor="bottom" id="Terminal" weight="0.3295082" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3295082" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3295082" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3295082" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/fastrcnnRoute.py</url>
-          <line>47</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/fastrcnnDetect.py</url>
-          <line>397</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/fastrcnnDetect.py</url>
-          <line>368</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35/Lib/site-packages/flask/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="113">
           <caret line="87" selection-start-line="87" selection-end-line="87" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-48">
-          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -232,17 +209,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/fastrcnnRoute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="47" selection-start-line="47" selection-end-line="47" />
+        <state relative-caret-position="19">
+          <caret line="46" column="83" selection-start-line="46" selection-start-column="83" selection-end-line="46" selection-end-column="83" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/fastrcnnDetect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="399" column="66" selection-start-line="399" selection-start-column="66" selection-end-line="399" selection-end-column="66" />
+        <state relative-caret-position="261">
+          <caret line="396" column="71" selection-start-line="396" selection-start-column="71" selection-end-line="396" selection-end-column="72" />
         </state>
       </provider>
     </entry>

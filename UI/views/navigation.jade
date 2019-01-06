@@ -16,8 +16,9 @@ nav#navigation.navbar.navbar-inverse
           div.input-group
             span.input-group-addon @
             input#selectedModel.form-control(type="text" placeholder="Model")
-          #openfile.btn.btn-default 打开文件
-          #recgonize.btn.btn-default 识别
+          li#inputfile: input#openFile.file(type="file" data-show-preview="false" onClick="openImage();")
+          li#recgonize.btn.btn-default(onClick="detect();") 识别
+
       ul.nav.navbar-nav.navbar-right
         li.navbar-text 人工判别
           span#checkResultok.glyphicon.glyphicon-ok

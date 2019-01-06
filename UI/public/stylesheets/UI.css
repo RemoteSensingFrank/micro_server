@@ -7,8 +7,6 @@ canvas{
     margin-left:10px; 
     margin-top:5px;
     float:left;
-    width: 900px;
-    height: 500px;
     border:3px solid#6699cc;
 }
 textarea{
@@ -19,11 +17,20 @@ textarea{
     height: 470px;
     border:3px solid#be900f;
 }
-#openfile,#recgonize{
+#recgonize{
     background-color: #00000000;
     color: #aaaaaa;
+    margin-top:8px;
     margin-left:5px;
 }
+#inputfile{
+    background-color: #00000000;
+    color: #aaaaaa;
+    margin-top:8px;
+    margin-left:5px;
+    width: 500px;
+}
+
 #checkResultok,#checkResulterr{
     margin-left:8px;
 }
